@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>775</width>
+    <height>577</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Печать на конвертах</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/res/envelope-shredder.png</normaloff>:/res/envelope-shredder.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidgetType">
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: rgb(255, 255, 255)
+</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tabNotice">
+       <attribute name="title">
+        <string>Извещение</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="1" column="0">
+         <widget class="QTabWidget" name="tabWidgetNotice">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::West</enum>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="elideMode">
+           <enum>Qt::ElideNone</enum>
+          </property>
+          <property name="usesScrollButtons">
+           <bool>false</bool>
+          </property>
+          <property name="documentMode">
+           <bool>false</bool>
+          </property>
+          <property name="tabsClosable">
+           <bool>false</bool>
+          </property>
+          <widget class="QWidget" name="tabNoticeFront">
+           <attribute name="title">
+            <string>Сторона 1</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="1" column="0">
+             <widget class="QGraphicsView" name="graphicsViewNoticeFront">
+              <property name="styleSheet">
+               <string notr="true">border: none</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabNoticeBack">
+           <attribute name="title">
+            <string>Сторона 2</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QGraphicsView" name="graphicsViewNoticeBack"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QWidget" name="widget_3" native="true">
+          <layout class="QGridLayout" name="gridLayout_9">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabEnvelope">
+       <attribute name="title">
+        <string>Конверт</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="2" column="0">
+         <widget class="QGraphicsView" name="graphicsViewEnvelope">
+          <property name="styleSheet">
+           <string notr="true">border: none</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QWidget" name="widget_2" native="true">
+          <layout class="QGridLayout" name="gridLayout_8">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBarFile">
+   <property name="windowTitle">
+    <string>Файл</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="loadRecipient"/>
+   <addaction name="separator"/>
+   <addaction name="settingApp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="windowIcon">
+    <iconset>
+     <normaloff>:/res/document_open.ico</normaloff>:/res/document_open.ico</iconset>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="windowTitle">
+    <string>Получатели</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="4" column="1">
+      <widget class="TableViewSp" name="tableView">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="autoScrollMargin">
+        <number>16</number>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+       <attribute name="verticalHeaderMinimumSectionSize">
+        <number>15</number>
+       </attribute>
+       <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="2">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QToolButton" name="widgetLoadRecipient">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Загрузить реестр писем</string>
+          </property>
+          <property name="text">
+           <string>Загрузить</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/res/document_open.png</normaloff>:/res/document_open.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QToolButton" name="widgetRemoveRecipient">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Удалить запись</string>
+          </property>
+          <property name="text">
+           <string>Удалить</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/res/editdelete.png</normaloff>:/res/editdelete.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QToolButton" name="widgetClearRecipient">
+          <property name="text">
+           <string>Очистить</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/res/editclear.png</normaloff>:/res/editclear.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="3">
+         <widget class="QToolButton" name="addRecepient">
+          <property name="text">
+           <string>Добавить</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/res/contact_new.png</normaloff>:/res/contact_new.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ins</string>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBarView">
+   <property name="windowTitle">
+    <string>Вид</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="zoomIn"/>
+   <addaction name="zoomOut"/>
+   <addaction name="separator"/>
+   <addaction name="modeSelect"/>
+   <addaction name="modeDrag"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarPrint">
+   <property name="windowTitle">
+    <string>Печать</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="saveAsPdf"/>
+   <addaction name="printPreview"/>
+   <addaction name="print"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>775</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="open"/>
+    <addaction name="saveAs"/>
+    <addaction name="separator"/>
+    <addaction name="saveAsPdf"/>
+    <addaction name="printPreview"/>
+    <addaction name="print"/>
+    <addaction name="separator"/>
+    <addaction name="settingApp"/>
+    <addaction name="separator"/>
+    <addaction name="quitApp"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Справка</string>
+    </property>
+    <addaction name="about"/>
+    <addaction name="checkUpdate"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>Получатели</string>
+    </property>
+    <addaction name="loadRecipient"/>
+    <addaction name="clearRecipient"/>
+    <addaction name="removeRecipient"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>Вид</string>
+    </property>
+    <addaction name="zoomOut"/>
+    <addaction name="zoomIn"/>
+    <addaction name="separator"/>
+    <addaction name="modeSelect"/>
+    <addaction name="modeDrag"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_6"/>
+   <addaction name="menu_5"/>
+   <addaction name="menu_4"/>
+  </widget>
+  <action name="loadRecipient">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/document_open.png</normaloff>:/res/document_open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Загрузить из реестр писем</string>
+   </property>
+  </action>
+  <action name="quitApp">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="clearRecipient">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/editclear.png</normaloff>:/res/editclear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Очистить список</string>
+   </property>
+  </action>
+  <action name="removeRecipient">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/editdelete.png</normaloff>:/res/editdelete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить получателя</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="zoomIn">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/zoom_in.png</normaloff>:/res/zoom_in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Увеличить</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
+  </action>
+  <action name="zoomOut">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/zoom_out.png</normaloff>:/res/zoom_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Уменьшить</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="settingApp">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/configure.png</normaloff>:/res/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Настройки</string>
+   </property>
+  </action>
+  <action name="modeSelect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/pointer.png</normaloff>:/res/pointer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Выбор</string>
+   </property>
+  </action>
+  <action name="modeDrag">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/hand-tool.png</normaloff>:/res/hand-tool.png</iconset>
+   </property>
+   <property name="text">
+    <string>Рука</string>
+   </property>
+  </action>
+  <action name="printPreview">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/document_print_preview.png</normaloff>:/res/document_print_preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Просмотр печати</string>
+   </property>
+  </action>
+  <action name="saveAsPdf">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/pdf.png</normaloff>:/res/pdf.png</iconset>
+   </property>
+   <property name="text">
+    <string>Сохранить как PDF</string>
+   </property>
+  </action>
+  <action name="print">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/document_print.png</normaloff>:/res/document_print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Печать</string>
+   </property>
+  </action>
+  <action name="about">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/res/help_about.png</normaloff>:/res/help_about.png</iconset>
+   </property>
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="saveAs">
+   <property name="text">
+    <string>Сохранить как</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="open">
+   <property name="text">
+    <string>Открыть</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="checkUpdate">
+   <property name="text">
+    <string>Проверить обновления</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TableViewSp</class>
+   <extends>QTableView</extends>
+   <header>MyWidget\tableviewsp.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-
+    enum NoticeSide { NoticeFront, NoticeBack };
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -87,7 +87,7 @@ private slots:
         void printPreviewEnvelope();
 
         int countPageNotice(const int page);
-        QRectF positionPrintNotice(const int pos);
+        QRectF positionPrintNotice(const int pos, int side);
 
     void saveAsPdf();
         void savePdfNotice();
@@ -115,7 +115,8 @@ private:
     QHeaderView *headerTable;
 
     QLabel *sb1;
-
+    QGraphicsRectItem *rectNoticeFront;
+    QGraphicsRectItem *rectNoticeBack;
     QGraphicsScene *sceneEnvelope;
     QGraphicsRectItem *rectEnvelope;
     QGraphicsTextItem *nameEnvelope;

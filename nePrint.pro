@@ -16,8 +16,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = nePrint
 TEMPLATE = app
 
-INCLUDEPATH += D:/Qt/Qt5.2.1/5.2.1/Src/qtbase/src/3rdparty/sqlite
-SOURCES += D:/Qt/Qt5.2.1/5.2.1/Src/qtbase/src/3rdparty/sqlite/sqlite3.c \
+INCLUDEPATH += D:/Qt/5.5/Src/qtbase/src/3rdparty/sqlite
+SOURCES += D:/Qt/5.5/Src/qtbase/src/3rdparty/sqlite/sqlite3.c \
     dialogsetting.cpp \
     setting.cpp \
     textitem.cpp \

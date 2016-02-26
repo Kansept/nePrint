@@ -9,6 +9,12 @@ Setting::Setting(QObject *parent) : QObject(parent)
     pathTemplateNoticeBack.clear();
     pathTemplateEnvelope.clear();
     duplexPrintNotice = true;
+    showBoundary = false;
+    autoMargin = true;
+    marginFrontTop = 0;
+    marginFrontLeft = 0;
+    marginBackTop = 0;
+    marginBackLeft = 0;
     settings = new QSettings( (QCoreApplication::applicationDirPath()) + "//setting.ini",QSettings::IniFormat );
 }
 
@@ -25,9 +31,17 @@ void Setting::saveSetting()
         settings->setValue( "pathTemplateNoticeBack",  pathTemplateNoticeBack  );
         settings->setValue( "duplexPrintNotice",       duplexPrintNotice       );
         settings->setValue( "fontNotice",              fontNotice              );
+        settings->setValue( "showBoundary",            showBoundary            );
+
+        settings->setValue( "autoMargin",      autoMargin );
+        settings->setValue( "marginFrontTop",  marginFrontTop  );
+        settings->setValue( "marginFrontLeft", marginFrontLeft );
+        settings->setValue( "marginBackTop",   marginBackTop  );
+        settings->setValue( "marginBackLeft",  marginBackLeft );
 
         settings->setValue( "pathTemplateEnvelope", pathTemplateEnvelope );
         settings->setValue( "fontEnvelope",         fontEnvelope         );
+        settings->setValue( "sizeEnvelope",         sizeEnvelope         );
     settings->endGroup();
     settings->sync();
 }
@@ -41,18 +55,26 @@ void Setting::saveSetting()
 void Setting::loadSetting()
 {
     settings->beginGroup("setting");    
-        pathTemplateNoticeFront   = settings->value( "pathTemplateNoticeFront", "" ).toString();
-        pathTemplateNoticeBack    = settings->value( "pathTemplateNoticeBack",  "" ).toString();
-        fontNotice                = settings->value( "fontNotice",   QFont("Arial")).value<QFont>();
-        duplexPrintNotice         = settings->value( "duplexPrintNotice", true ).toBool();
-        positionNameNoticeBack    = settings->value( "positionNameNoticeBack",    QPointF(20,50)).toPointF();
-        positionAddressNoticeBack = settings->value( "positionAddressNoticeBack", QPointF(20,50)).toPointF();
-        positionNumberNoticeBack  = settings->value( "positionNumberNoticeBack",  QPointF(20,80)).toPointF();
+        pathTemplateNoticeFront = settings->value( "pathTemplateNoticeFront", "" ).toString();
+        pathTemplateNoticeBack  = settings->value( "pathTemplateNoticeBack",  "" ).toString();
+        fontNotice = settings->value( "fontNotice", QFont("Arial") ).value<QFont>();
+        duplexPrintNotice = settings->value( "duplexPrintNotice", true ).toBool();
+        showBoundary  = settings->value( "showBoundary", false ).toBool();
+        positionNameNoticeBack    = settings->value( "positionNameNoticeBack",    QPointF(20, 50)).toPointF();
+        positionAddressNoticeBack = settings->value( "positionAddressNoticeBack", QPointF(20, 50)).toPointF();
+        positionNumberNoticeBack  = settings->value( "positionNumberNoticeBack",  QPointF(20, 80)).toPointF();
 
-        pathTemplateEnvelope    = settings->value( "pathTemplateEnvelope",    "" ).toString();
-        fontEnvelope            = settings->value( "fontEnvelope",   QFont("Arial")).value<QFont>();
-        positionNameEnvelope    = settings->value( "positionNameEnvelope",    QPointF(20,20)).toPointF();
-        positionAddressEnvelope = settings->value( "positionAddressEnvelope", QPointF(20,50)).toPointF();
+        autoMargin = settings->value( "autoMargin",  true ).toBool();
+        marginFrontTop  = settings->value( "marginFrontTop",  0 ).toInt();
+        marginFrontLeft = settings->value( "marginFrontLeft", 0 ).toInt();
+        marginBackTop   = settings->value( "marginBackTop",  0 ).toInt();
+        marginBackLeft  = settings->value( "marginBackLeft", 0 ).toInt();
+
+        pathTemplateEnvelope = settings->value( "pathTemplateEnvelope", "" ).toString();
+        fontEnvelope = settings->value( "fontEnvelope", QFont("Arial") ).value<QFont>();
+        positionNameEnvelope    = settings->value( "positionNameEnvelope",    QPointF(20, 20) ).toPointF();
+        positionAddressEnvelope = settings->value( "positionAddressEnvelope", QPointF(20, 50) ).toPointF();
+        sizeEnvelope = settings->value( "sizeEnvelope", QSizeF(200, 200) ).toSizeF();
     settings->endGroup();
 }
 

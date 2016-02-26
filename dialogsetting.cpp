@@ -21,6 +21,7 @@ DialogSetting::DialogSetting(QWidget *parent) :
     connect ( ui->toolButtonTemplateNoticeFront, SIGNAL(clicked()), SLOT(setTemplateNoticeFront()) );
     connect ( ui->toolButtonTemplateNoticeBack, SIGNAL(clicked()), SLOT(setTemplateNoticeBack())  );
     connect ( ui->fontNotice, SIGNAL(clicked()), SLOT(setFontNotice())          );
+    connect ( ui->marginAuto, SIGNAL(clicked(bool)), SLOT(setAutoMargin()) );
     // Envelope
     connect ( ui->toolButtonTemplateEnvelope, SIGNAL(clicked()), SLOT(setTemplateEnvelope()) );
     connect ( ui->fontEnvelope, SIGNAL(clicked()), SLOT(setFontEnvelope()) );
@@ -69,6 +70,22 @@ void DialogSetting::setTemplateNoticeBack()
 }
 
 
+void DialogSetting::setAutoMargin()
+{
+    if ( ui->marginAuto->isChecked() ) {
+        ui->marginFrontTop->setDisabled(true);
+        ui->marginFrontTop->setDisabled(true);
+        ui->marginBackTop->setDisabled(true);
+        ui->marginBackTop->setDisabled(true);
+    } else {
+        ui->marginFrontTop->setDisabled(false);
+        ui->marginFrontTop->setDisabled(false);
+        ui->marginBackTop->setDisabled(false);
+        ui->marginBackTop->setDisabled(false);
+    }
+}
+
+
 void DialogSetting::setTemplateEnvelope()
 {
     QString fOpen = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "", tr("All support files (*.svg);;") );
@@ -82,10 +99,17 @@ void DialogSetting::setTemplateEnvelope()
 
 void DialogSetting::saveSetting()
 {
+    setting->showBoundary = ui->showBoundary->isChecked();
     setting->duplexPrintNotice       = ui->duplexPrintNotice->isChecked();
     setting->pathTemplateEnvelope    = ui->pathTemplateEnvelope->text();
     setting->pathTemplateNoticeFront = ui->pathTemplateNoticeFront->text();
     setting->pathTemplateNoticeBack  = ui->pathTemplateNoticeBack->text();
+
+    setting->autoMargin = ui->marginAuto->isChecked();
+    setting->marginFrontTop  = ui->marginFrontTop->value();
+    setting->marginFrontLeft = ui->marginFrontLeft->value();
+    setting->marginBackTop   = ui->marginBackTop->value();
+    setting->marginBackLeft  = ui->marginBackLeft->value();
 
     setting->saveSetting();
     emit settingSaved();
@@ -112,11 +136,18 @@ void DialogSetting::showSettingEnvelope()
 void DialogSetting::loadSetting()
 {
     setting->loadSetting();
+
     ui->pathTemplateEnvelope->setText(setting->pathTemplateEnvelope);
     ui->pathTemplateNoticeFront->setText(setting->pathTemplateNoticeFront);
     ui->pathTemplateNoticeBack->setText(setting->pathTemplateNoticeBack);
     ui->duplexPrintNotice->setChecked(setting->duplexPrintNotice);
+    ui->showBoundary->setChecked(setting->showBoundary);
 
+    ui->marginAuto->setChecked( setting->autoMargin );
+    ui->marginFrontTop->setValue( setting->marginFrontTop );
+    ui->marginFrontLeft->setValue( setting->marginFrontLeft );
+    ui->marginBackTop->setValue( setting->marginBackTop );
+    ui->marginBackLeft->setValue( setting->marginBackLeft );
 }
 
 

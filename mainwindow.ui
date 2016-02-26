@@ -553,7 +553,7 @@
      <normaloff>:/res/pdf.png</normaloff>:/res/pdf.png</iconset>
    </property>
    <property name="text">
-    <string>Сохранить как PDF</string>
+    <string>Экспорт в PDF</string>
    </property>
   </action>
   <action name="print">

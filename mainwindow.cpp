@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QIcon>
 #include <QtConcurrent>
+#include <QMargins>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -233,6 +234,7 @@ void MainWindow::createViewNotice()
     svgNoticeFront->setCachingEnabled(true);
     sceneNoticeFront->addItem(svgNoticeFront);
     svgNoticeFront->setZValue(1);
+
     // Холст
     rectangleFront = sceneNoticeFront->addRect( rectCanvasNotice, blackPen, Qt::white );
     rectangleFront->setZValue(-1);
@@ -271,6 +273,14 @@ void MainWindow::createViewNotice()
     ui->graphicsViewNoticeBack->setInteractive(true);
     ui->graphicsViewNoticeBack->setMouseTracking(true);
     ui->graphicsViewNoticeBack->setScene(sceneNoticeBack);
+
+    rectNoticeFront = sceneNoticeFront->addRect(
+                sceneNoticeFront->sceneRect(), QPen(Qt::black, 2, Qt::DotLine), Qt::white );
+    rectNoticeBack = sceneNoticeBack->addRect(
+                sceneNoticeBack->sceneRect(), QPen(Qt::black, 2, Qt::DotLine), Qt::white );
+
+    rectNoticeFront->hide();
+    rectNoticeBack->hide();
 }
 
 
@@ -348,7 +358,7 @@ void MainWindow::createModelRecipient()
 void MainWindow::open()
 {
     QString pathFile = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "",
-                                                    tr("QPrint (*.qpr *.*);;") );
+                                                    tr("QPrint (*.qpr);;") );
     if ( !pathFile.isEmpty() ) {
         DbRecepient::saveToFile( QSqlDatabase::database("recepient"), pathFile, false );
         modelRecipient->submitAll();
@@ -359,7 +369,7 @@ void MainWindow::open()
 void MainWindow::saveAs()
 {
     QString pathFile = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), "",
-                                                    tr("QPrint (*.qpr *.*);;") );
+                                                    tr("QPrint (*.qpr);;") );
     if ( !pathFile.isEmpty() )
         DbRecepient::saveToFile( QSqlDatabase::database("recepient"), pathFile, true );
 }
@@ -367,9 +377,9 @@ void MainWindow::saveAs()
 
 void MainWindow::loadExcelInThread()
 {   
-    if ( QThread::idealThreadCount() >= 2 )
-        QtConcurrent::run( this, &MainWindow::loadExcel );
-    else
+//    if ( QThread::idealThreadCount() >= 2 )
+//        QtConcurrent::run( this, &MainWindow::loadExcel );
+//    else
         loadExcel();
 }
 
@@ -381,6 +391,7 @@ void MainWindow::loadExcel()
 
     QString pathFile = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "",
                                                     tr("All support files (*.xls *.xlsx);;") );
+
     if (pathFile.isEmpty())
         return;
 
@@ -549,7 +560,6 @@ void MainWindow::print()
 
 void MainWindow::configurePrinterEnvelope(QPrinter *printer)
 {
-    printer->setPageMargins( 0, 0, 0, 0, QPrinter::Millimeter );
     printer->setPageSize(QPrinter::DLE);
     printer->setOrientation(QPrinter::Landscape);
     printer->setResolution(300);
@@ -558,7 +568,6 @@ void MainWindow::configurePrinterEnvelope(QPrinter *printer)
 
 void MainWindow::configurePrinterNotice(QPrinter *printer)
 {
-    printer->setPageMargins( 0, 0, 0, 0, QPrinter::Millimeter );
     printer->setPageSize(QPrinter::A4);
     printer->setOrientation(QPrinter::Landscape);
     printer->setResolution(300);
@@ -567,6 +576,14 @@ void MainWindow::configurePrinterNotice(QPrinter *printer)
 
 void MainWindow::printNotice(QPrinter *printer)
 {
+    if ( setting->showBoundary ) {
+       rectNoticeFront->show();
+       rectNoticeBack->show();
+    } else {
+        rectNoticeFront->hide();
+        rectNoticeBack->hide();
+    }
+
     nameNoticeBack->setFlag(QGraphicsItem::ItemIsSelectable, false);
     addressNoticeBack->setFlag(QGraphicsItem::ItemIsSelectable, false);
 
@@ -583,6 +600,8 @@ void MainWindow::printNotice(QPrinter *printer)
         }
     }
 
+    rectNoticeFront->hide();
+    rectNoticeBack->hide();
     nameNoticeBack->setFlag(QGraphicsItem::ItemIsSelectable, true);
     addressNoticeBack->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -599,12 +618,14 @@ void MainWindow::printNoticeFront(QPrinter *printer)
     QVector<Recepient> recepients ( DbRecepient::getEnabledRecepient() );
 
     for ( int i = 0; i < countPageNotice(recepients.count()); i++ ) {
-        if ( !firstPage )
+        if ( !firstPage ) {
             printer->newPage();
+            printer->setPageMargins( 0, 0, 0, 0, QPrinter::Millimeter );
+        }
         for ( int j = 0; j < 4; j++ ) {
             if ( (i*4+j) < recepients.count() ) {
                 setRecepient( recepients.at(i*4+j) );
-                sceneNoticeFront->render(&painter, positionPrintNotice(j),
+                sceneNoticeFront->render(&painter, positionPrintNotice(j, NoticeFront),
                                         sceneNoticeFront->sceneRect(), Qt::KeepAspectRatio);
             }
             firstPage = false;
@@ -625,12 +646,14 @@ void MainWindow::printNoticeBack(QPrinter *printer)
     QVector<Recepient> recepients ( DbRecepient::getEnabledRecepient() );
 
     for ( int i = 0; i < countPageNotice(recepients.count()); i++ ) {
-        if ( !firstPage )
+        if ( !firstPage ) {
             printer->newPage();
+            printer->setPageMargins( 0, 0, 0, 0, QPrinter::Millimeter );
+        }
         for ( int j = 0; j < 4; j++ ) {
             if ( (i*4+j) < recepients.count() ) {
                 setRecepient( recepients.at(i*4+j) );
-                sceneNoticeBack->render(&painter, positionPrintNotice(j),
+                sceneNoticeBack->render(&painter, positionPrintNotice(j, NoticeBack),
                                         sceneNoticeBack->sceneRect(), Qt::KeepAspectRatio);
             }
             firstPage = false;
@@ -654,20 +677,27 @@ void MainWindow::printNoticeDuplex(QPrinter *printer)
     for ( int i = 0; i < countPageNotice( recepients.count() ); i++ ) {
         if ( !firstPage )
             printer->newPage();
+
         for ( int j = 0; j < 4; j++ ) {
             if ( (i*4+j) < recepients.count() ) {
                 setRecepient( recepients.at(i*4+j) );
-                sceneNoticeFront->render(&painter, positionPrintNotice(j),
-                                         sceneNoticeFront->sceneRect(), Qt::KeepAspectRatio);
+                sceneNoticeFront->render(
+                    &painter, positionPrintNotice(j, NoticeFront),
+                    sceneNoticeFront->sceneRect(), Qt::KeepAspectRatio
+                );
             }
         }
+
         firstPage = false;
+
         printer->newPage();
         for ( int j = 0; j < 4; j++ ) {
             if ( (i*4+j) < recepients.count() ) {
                 setRecepient( recepients.at(i*4+j) );
-                sceneNoticeBack->render(&painter, positionPrintNotice(j),
-                                        sceneNoticeBack->sceneRect(), Qt::KeepAspectRatio);
+                sceneNoticeBack->render(
+                    &painter, positionPrintNotice(j, NoticeBack),
+                    sceneNoticeBack->sceneRect(), Qt::KeepAspectRatio
+                );
             }
         }
     }
@@ -766,7 +796,7 @@ int MainWindow::countPageNotice(int page)
 }
 
 
-QRectF MainWindow::positionPrintNotice(int pos)
+QRectF MainWindow::positionPrintNotice(int pos, int side)
 {
     QRectF rectTarget;
     QRectF rectSourse( sceneNoticeBack->sceneRect() );
@@ -779,12 +809,25 @@ QRectF MainWindow::positionPrintNotice(int pos)
     printer.setResolution(300);
     printer.setOrientation(QPrinter::Landscape);
 
-    float marginWidth ( ((printer.pageRect().width() - (rectSourse.width()*2))/2) );
-    float marginHeight ( ((printer.pageRect().height() - (rectSourse.height()*2))/2) );
+    float marginWidth(0);
+    float marginHeight(0);
+
+    if ( setting->autoMargin ) {
+        marginWidth  = ( (printer.pageRect().width() - (rectSourse.width()*2))/2 );
+        marginHeight = ( (printer.pageRect().height() - (rectSourse.height()*2))/2 );
+    } else {
+        if ( side == NoticeFront ) {
+            marginWidth  = setting->marginFrontLeft;
+            marginHeight = setting->marginFrontTop;
+        } else if ( side == NoticeBack ) {
+            marginWidth  = setting->marginBackLeft;
+            marginHeight = setting->marginBackTop;
+        }
+    }
 
     switch (pos) {
     case 0:       
-        rectTarget = QRectF(marginWidth + rectSourse.width(), marginHeight + 0,
+        rectTarget = QRectF(marginWidth + rectSourse.width(), marginHeight,
                             rectSourse.width(), rectSourse.height());
         break;
     case 1:
@@ -792,12 +835,11 @@ QRectF MainWindow::positionPrintNotice(int pos)
                             rectSourse.width(), rectSourse.height());
         break;
     case 2:
-        rectTarget = QRectF(marginWidth + 0, marginHeight + 0,
+        rectTarget = QRectF(marginWidth, marginHeight,
                             rectSourse.width(), rectSourse.height());
         break;
     case 3:
-
-        rectTarget = QRectF(marginWidth + 0, marginHeight + rectSourse.height(),
+        rectTarget = QRectF(marginWidth, marginHeight + rectSourse.height(),
                             rectSourse.width(), rectSourse.height());
         break;
     default:
@@ -1048,7 +1090,7 @@ void MainWindow::about()
                 </head> \
                 <body> \
                 <h3>Печать на конвертах</h3> \
-                <p>Версия: 0.7</p> \
+                <p>Версия: 0.72</p> \
                 <p>Автор: Владимир Kansept</p> \
                 <p>email:<a href=\"mailto:kansept@yandex.ru\">kansept@yandex.ru</a></p><br/> \
                 </body></html>";

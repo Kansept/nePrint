@@ -42,6 +42,8 @@ signals:
     void settingSaved();
 protected:
     void showEvent(QShowEvent *event);
+private slots:
+    void setAutoMargin();
 };
 
 

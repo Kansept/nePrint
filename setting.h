@@ -6,6 +6,7 @@
 #include <QCoreApplication>
 #include <QPointF>
 #include <QFont>
+#include <QSizeF>
 
 
 class Setting : public QObject
@@ -20,6 +21,7 @@ public:
     QPointF positionNameEnvelope;
     QPointF positionAddressEnvelope;
     QFont fontEnvelope;
+    QSizeF sizeEnvelope;
 
     QString pathTemplateNoticeFront;
     QString pathTemplateNoticeBack;
@@ -27,6 +29,12 @@ public:
     QPointF positionAddressNoticeBack;
     QPointF positionNumberNoticeBack;
     bool duplexPrintNotice;
+    bool showBoundary;
+    bool autoMargin;
+    int marginFrontTop;
+    int marginFrontLeft;
+    int marginBackTop;
+    int marginBackLeft;
     QFont fontNotice;
 
 public slots:

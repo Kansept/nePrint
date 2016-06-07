@@ -99,6 +99,7 @@ private slots:
     void recepientHotKey(int key, int modifierKey);
     void setRecepient(Recepient recepient);
     void getListFiles( QString path, QFileInfoList &listTempFiles );
+
 private:
     void createViewNotice();
     void createViewEnvelope();
@@ -140,6 +141,7 @@ private:
     QAction *actionSettingNotice;
     QAction *actionSavePositionNotice;
 
+    QVector<Recepient> getRecepient();
 protected:
     void showEvent(QShowEvent *event);
 };

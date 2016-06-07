@@ -615,7 +615,7 @@ void MainWindow::printNoticeFront(QPrinter *printer)
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
     bool firstPage (true);
-    QVector<Recepient> recepients ( DbRecepient::getEnabledRecepient() );
+    QVector<Recepient> recepients ( getRecepient() );
 
     for ( int i = 0; i < countPageNotice(recepients.count()); i++ ) {
         if ( !firstPage ) {
@@ -643,7 +643,7 @@ void MainWindow::printNoticeBack(QPrinter *printer)
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
     bool firstPage (true);
-    QVector<Recepient> recepients ( DbRecepient::getEnabledRecepient() );
+    QVector<Recepient> recepients ( getRecepient() );
 
     for ( int i = 0; i < countPageNotice(recepients.count()); i++ ) {
         if ( !firstPage ) {
@@ -719,7 +719,7 @@ void MainWindow::printEnvelope(QPrinter *printer)
         painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform,
                                true);
         bool firstPage (true);
-        QVector<Recepient> recepients ( DbRecepient::getEnabledRecepient() );
+        QVector<Recepient> recepients ( getRecepient() );
 
         for ( int i = 0; i < recepients.count(); ++i ) {
             if ( !firstPage )
@@ -732,6 +732,26 @@ void MainWindow::printEnvelope(QPrinter *printer)
     painter.end();
     nameEnvelope->setFlag(QGraphicsItem::ItemIsSelectable, true);
     addressEnvelope->setFlag(QGraphicsItem::ItemIsSelectable, true);
+}
+
+
+QVector<Recepient> MainWindow::getRecepient()
+{
+    QVector<Recepient> recepients;
+
+    for ( int i = 0; i < modelRecipient->rowCount(); ++i ) {
+        ui->tableView->selectRow(i);
+        Recepient recepient;
+        QSqlRecord record = modelRecipient->record( ui->tableView->currentIndex().row() );
+        if ( record.value("status").toInt() == 1 ) {
+            recepient.setName( record.value("name").toString() );
+            recepient.setAddress( record.value("address").toString() );
+            recepient.setNumber( record.value("number").toString() );
+            recepients.append(recepient);
+        }
+    }
+
+    return recepients;
 }
 
 

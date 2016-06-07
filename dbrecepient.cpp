@@ -56,7 +56,7 @@ QVector<Recepient> DbRecepient::getEnabledRecepient()
     query.exec( " SELECT * "
                 " FROM recepient "
                 " WHERE status = 1 "
-                " ORDER BY name ASC  "
+             // " ORDER BY name ASC  "
                 );
 
     while (query.next()) {

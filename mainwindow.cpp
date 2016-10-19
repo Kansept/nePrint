@@ -508,6 +508,7 @@ void MainWindow::changeRecipient(QModelIndex index)
 
     nameEnvelope->setPlainText( record.value("name").toString() );
     addressEnvelope->setPlainText( record.value("address").toString() );
+    addressEnvelope->setTextWidth(330);
 }
 
 

@@ -46,7 +46,7 @@ void DialogRecepient::add(Recepient sendRecepient)
 void DialogRecepient::save()
 {
     recepient->setName( ui->name->text() );
-    recepient->setAddress( ui->address->text() );
+    recepient->setAddress( ui->address->toPlainText() );
     recepient->setNumber( ui->number->text() );
 
     sendRecepient(*recepient);
